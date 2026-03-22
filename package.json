@@ -2,7 +2,12 @@
   "name": "@devstash/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "nx-run": "nx $TASK $APP",
+    "nx-show": "nx show project $APP",
+    "nx-next:app-generate": "nx g @nx/next:app $APP",
+    "nx-react:lib-generate": "nx g @nx/react:lib $APP"
+  },
   "private": true,
   "dependencies": {
     "next": "~16.1.6",

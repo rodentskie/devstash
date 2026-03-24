@@ -303,14 +303,6 @@ git switch -c lesson-01-setup
 - Basic tags
 - Free tier limits
 
-### **Pro Phase**
-
-- AI features
-- Custom item types
-- File uploads
-- Export
-- Billing & upgrade flow
-
 ### **Future Enhancements**
 
 - Shared collections

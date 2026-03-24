@@ -36,10 +36,10 @@ This creates constant context switching, lost knowledge, and inconsistent workfl
 |-------|--------|
 | Framework | Next.js 16 / React 19 (monorepo via Nx) |
 | Language | TypeScript |
-| Database | PostgreSQL on AWS RDS Serverless v2 |
+| Database | PostgreSQL on Neon |
 | ORM | Prisma 7 |
 | Auth | NextAuth v5 (Email/password + GitHub OAuth) |
-| File Storage | AWS S3 |
+| File Storage | Cloudflare R2 |
 | AI | OpenAI `gpt-4o-mini` |
 | CSS | Tailwind CSS v4 + shadcn/ui |
 | Caching | Redis (optional, TBD) |

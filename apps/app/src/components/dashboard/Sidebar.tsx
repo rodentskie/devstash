@@ -1,0 +1,225 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+import {
+  Code,
+  Sparkles,
+  Terminal,
+  StickyNote,
+  File,
+  ImageIcon,
+  Link as LinkIcon,
+  Star,
+  ChevronDown,
+  ChevronRight,
+  FolderOpen,
+} from 'lucide-react';
+import { itemTypes, collections, currentUser, typeCounts } from '@/lib/mock-data';
+import { useSidebar } from './SidebarProvider';
+
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
+  Code,
+  Sparkles,
+  Terminal,
+  StickyNote,
+  File,
+  ImageIcon,
+  Link: LinkIcon,
+};
+
+function CollapsedSidebar() {
+  const favoriteCollections = collections.filter((c) => c.isFavorite);
+
+  return (
+    <div className="flex h-full w-14 flex-col items-center bg-card border-r border-border py-3">
+      <nav className="flex flex-1 flex-col items-center gap-1 overflow-y-auto w-full px-2">
+        {/* Type icons */}
+        {itemTypes.map((type) => {
+          const Icon = ICON_MAP[type.icon];
+          return (
+            <Link
+              key={type.id}
+              href={`/items/${type.slug}`}
+              title={type.name}
+              className="flex h-8 w-8 items-center justify-center rounded-md hover:bg-accent transition-colors"
+            >
+              {Icon && <Icon className="h-4 w-4" style={{ color: type.color }} />}
+            </Link>
+          );
+        })}
+
+        {/* Divider */}
+        <div className="my-1 w-6 border-t border-border" />
+
+        {/* Favorite collection icons */}
+        {favoriteCollections.map((col) => (
+          <Link
+            key={col.id}
+            href={`/collections/${col.id}`}
+            title={col.name}
+            className="flex h-8 w-8 items-center justify-center rounded-md hover:bg-accent transition-colors"
+          >
+            <FolderOpen className="h-4 w-4 text-yellow-400" />
+          </Link>
+        ))}
+      </nav>
+
+      {/* User avatar */}
+      <div className="mt-auto pt-3 border-t border-border w-full flex justify-center">
+        <div
+          title={currentUser.name}
+          className="h-7 w-7 rounded-full bg-primary flex items-center justify-center text-xs font-semibold text-primary-foreground cursor-pointer"
+        >
+          {currentUser.name.charAt(0)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ExpandedSidebar() {
+  const [typesOpen, setTypesOpen] = useState(true);
+  const [collectionsOpen, setCollectionsOpen] = useState(true);
+
+  const favoriteCollections = collections.filter((c) => c.isFavorite);
+  const otherCollections = collections.filter((c) => !c.isFavorite);
+
+  return (
+    <div className="flex h-full w-64 flex-col bg-card border-r border-border">
+      <nav className="flex-1 overflow-y-auto p-3 space-y-4">
+        {/* Types Section */}
+        <div>
+          <button
+            onClick={() => setTypesOpen((v) => !v)}
+            className="flex w-full items-center justify-between px-2 py-1 text-xs font-medium text-muted-foreground hover:text-foreground uppercase tracking-wider transition-colors"
+          >
+            Types
+            {typesOpen ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
+          </button>
+          {typesOpen && (
+            <ul className="mt-1 space-y-0.5">
+              {itemTypes.map((type) => {
+                const Icon = ICON_MAP[type.icon];
+                const count = typeCounts[type.id];
+                return (
+                  <li key={type.id}>
+                    <Link
+                      href={`/items/${type.slug}`}
+                      className="flex items-center justify-between rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+                    >
+                      <div className="flex items-center gap-2">
+                        {Icon && <Icon className="h-4 w-4" style={{ color: type.color }} />}
+                        <span>{type.name}</span>
+                      </div>
+                      <span className="text-xs text-muted-foreground">{count}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+
+        {/* Collections Section */}
+        <div>
+          <button
+            onClick={() => setCollectionsOpen((v) => !v)}
+            className="flex w-full items-center justify-between px-2 py-1 text-xs font-medium text-muted-foreground hover:text-foreground uppercase tracking-wider transition-colors"
+          >
+            Collections
+            {collectionsOpen ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
+          </button>
+          {collectionsOpen && (
+            <div className="mt-1 space-y-3">
+              {favoriteCollections.length > 0 && (
+                <div>
+                  <p className="px-2 py-1 text-xs text-muted-foreground uppercase tracking-wider">
+                    Favorites
+                  </p>
+                  <ul className="space-y-0.5">
+                    {favoriteCollections.map((col) => (
+                      <li key={col.id}>
+                        <Link
+                          href={`/collections/${col.id}`}
+                          className="flex items-center justify-between rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+                        >
+                          <span className="truncate">{col.name}</span>
+                          <Star className="h-3 w-3 fill-yellow-400 text-yellow-400 shrink-0 ml-2" />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {otherCollections.length > 0 && (
+                <div>
+                  <p className="px-2 py-1 text-xs text-muted-foreground uppercase tracking-wider">
+                    All Collections
+                  </p>
+                  <ul className="space-y-0.5">
+                    {otherCollections.map((col) => (
+                      <li key={col.id}>
+                        <Link
+                          href={`/collections/${col.id}`}
+                          className="flex items-center justify-between rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+                        >
+                          <span className="truncate">{col.name}</span>
+                          <span className="text-xs text-muted-foreground shrink-0 ml-2">
+                            {col.itemCount}
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </nav>
+
+      {/* User Avatar */}
+      <div className="border-t border-border p-3">
+        <div className="flex items-center gap-3 rounded-md px-2 py-2 hover:bg-accent transition-colors cursor-pointer">
+          <div className="h-7 w-7 rounded-full bg-primary flex items-center justify-center text-xs font-semibold text-primary-foreground shrink-0">
+            {currentUser.name.charAt(0)}
+          </div>
+          <div className="flex-1 overflow-hidden">
+            <p className="text-sm font-medium truncate">{currentUser.name}</p>
+            <p className="text-xs text-muted-foreground truncate">{currentUser.email}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function Sidebar() {
+  const { open, mobileOpen, toggleMobile } = useSidebar();
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <div
+        className="hidden md:block shrink-0 overflow-hidden transition-[width] duration-300 ease-in-out"
+        style={{ width: open ? '256px' : '56px' }}
+      >
+        {open ? <ExpandedSidebar /> : <CollapsedSidebar />}
+      </div>
+
+      {/* Mobile drawer overlay */}
+      {mobileOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-black/50 md:hidden"
+            onClick={toggleMobile}
+          />
+          <div className="fixed inset-y-0 left-0 z-50 md:hidden">
+            <ExpandedSidebar />
+          </div>
+        </>
+      )}
+    </>
+  );
+}

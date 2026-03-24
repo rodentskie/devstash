@@ -1,0 +1,57 @@
+{
+  "name": "@devstash/app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/app/src",
+  "targets": {
+    "db:migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate dev",
+        "cwd": "apps/app"
+      }
+    },
+    "db:migrate:deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate deploy",
+        "cwd": "apps/app"
+      }
+    },
+    "db:migrate:status": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate status",
+        "cwd": "apps/app"
+      }
+    },
+    "db:generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma generate",
+        "cwd": "apps/app"
+      }
+    },
+    "db:seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma db seed",
+        "cwd": "apps/app"
+      }
+    },
+    "db:test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsx script/test-db.ts",
+        "cwd": "apps/app"
+      }
+    },
+    "db:studio": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma studio",
+        "cwd": "apps/app"
+      }
+    }
+  }
+}

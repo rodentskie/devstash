@@ -46,6 +46,11 @@ This creates constant context switching, lost knowledge, and inconsistent workfl
 
 > ⚠️ **DB Rule:** Never use `db push`. Always create migrations that run in both dev and prod.
 
+## Monorepo Setup
+
+This is a monorepo powered by `nx`.
+Do not ever install packages to the app's `package.json` file. Just add it on the root `package.json` and install. Then manually add it on the project's `package.json`.
+
 ---
 
 ## Features

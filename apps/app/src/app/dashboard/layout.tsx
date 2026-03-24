@@ -1,4 +1,4 @@
-import { Search, Plus, Database } from 'lucide-react';
+import { Search, Plus, Database, FolderPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -15,7 +15,11 @@ function TopBar() {
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input className="pl-9" placeholder="Search items..." />
       </div>
-      <div className="flex justify-end">
+      <div className="flex items-center justify-end gap-2">
+        <Button variant="outline" size="sm">
+          <FolderPlus className="h-4 w-4" />
+          New Collection
+        </Button>
         <Button size="sm">
           <Plus className="h-4 w-4" />
           New Item

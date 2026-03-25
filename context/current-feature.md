@@ -25,3 +25,4 @@ Not Started
 - **2026-03-24** — Dashboard UI Phase 2
 - **2026-03-24** — Dashboard UI Phase 3
 - **2026-03-24** — Prisma 7 + Neon PostgreSQL Setup
+- **2026-03-25** — Seed Data

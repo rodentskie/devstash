@@ -27,6 +27,7 @@ const COLLECTIONS = [
   {
     name: "React Patterns",
     description: "Reusable React patterns and hooks",
+    isFavorite: true,
     items: [
       {
         type: "snippet",
@@ -388,7 +389,7 @@ async function main() {
 
     if (!collection) {
       collection = await prisma.collection.create({
-        data: { name: col.name, description: col.description, userId: user.id },
+        data: { name: col.name, description: col.description, isFavorite: col.isFavorite ?? false, userId: user.id },
       });
       console.log(`  Created collection: ${collection.name}`);
     } else {

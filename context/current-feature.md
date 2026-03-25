@@ -1,20 +1,13 @@
 # Current Feature
 
-<!-- Feature Name -->
 
 ## Status
-
-<!-- Not Started|In Progress|Completed -->
 
 Not Started
 
 ## Goals
 
-<!-- Goals & requirements -->
-
 ## Notes
-
-<!-- Any extra notes -->
 
 ## History
 
@@ -28,3 +21,4 @@ Not Started
 - **2026-03-25** — Seed Data
 - **2026-03-25** — Dashboard Collections (real DB data)
 - **2026-03-25** — Dashboard Items (real DB data)
+- **2026-03-25** — Stats & Sidebar (real DB data)

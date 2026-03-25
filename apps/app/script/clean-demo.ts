@@ -9,17 +9,17 @@ const adapter = new PrismaPg({
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  const user = await prisma.user.findUnique({
-    where: { email: "demo@devstash.io" },
-  });
-
-  if (!user) {
-    console.log("Demo user not found — nothing to clean.");
-    return;
-  }
-
-  await prisma.user.delete({ where: { id: user.id } });
-  console.log("Deleted demo user and all associated data.");
+  await prisma.itemTag.deleteMany();
+  await prisma.collectionItem.deleteMany();
+  await prisma.item.deleteMany();
+  await prisma.tag.deleteMany();
+  await prisma.collection.deleteMany();
+  await prisma.itemType.deleteMany();
+  await prisma.session.deleteMany();
+  await prisma.account.deleteMany();
+  await prisma.verificationToken.deleteMany();
+  await prisma.user.deleteMany();
+  console.log("Database wiped. You can now run db:seed.");
 }
 
 main()

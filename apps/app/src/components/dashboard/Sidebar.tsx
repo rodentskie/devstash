@@ -14,9 +14,12 @@ import {
   ChevronDown,
   ChevronRight,
   FolderOpen,
+  Image,
 } from 'lucide-react';
-import { itemTypes, collections, currentUser, typeCounts } from '@/lib/mock-data';
+import { currentUser } from '@/lib/mock-data';
 import { useSidebar } from './SidebarProvider';
+import type { ItemTypeWithCount } from '@/lib/db/items';
+import type { CollectionWithStats } from '@/lib/db/collections';
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
   Code,
@@ -25,18 +28,22 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?:
   StickyNote,
   File,
   ImageIcon,
+  Image,
   Link: LinkIcon,
 };
 
-function CollapsedSidebar() {
-  const favoriteCollections = collections.filter((c) => c.isFavorite);
+type SidebarProps = {
+  itemTypes: ItemTypeWithCount[];
+  favoriteCollections: CollectionWithStats[];
+  recentCollections: CollectionWithStats[];
+};
 
+function CollapsedSidebar({ itemTypes, favoriteCollections }: Omit<SidebarProps, 'recentCollections'>) {
   return (
     <div className="flex h-full w-14 flex-col items-center bg-card border-r border-border py-3">
       <nav className="flex flex-1 flex-col items-center gap-1 overflow-y-auto w-full px-2">
-        {/* Type icons */}
         {itemTypes.map((type) => {
-          const Icon = ICON_MAP[type.icon];
+          const Icon = ICON_MAP[type.icon ?? ''];
           return (
             <Link
               key={type.id}
@@ -44,15 +51,13 @@ function CollapsedSidebar() {
               title={type.name}
               className="flex h-8 w-8 items-center justify-center rounded-md hover:bg-accent transition-colors"
             >
-              {Icon && <Icon className="h-4 w-4" style={{ color: type.color }} />}
+              {Icon && <Icon className="h-4 w-4" style={{ color: type.color ?? undefined }} />}
             </Link>
           );
         })}
 
-        {/* Divider */}
         <div className="my-1 w-6 border-t border-border" />
 
-        {/* Favorite collection icons */}
         {favoriteCollections.map((col) => (
           <Link
             key={col.id}
@@ -65,7 +70,6 @@ function CollapsedSidebar() {
         ))}
       </nav>
 
-      {/* User avatar */}
       <div className="mt-auto pt-3 border-t border-border w-full flex justify-center">
         <div
           title={currentUser.name}
@@ -78,12 +82,9 @@ function CollapsedSidebar() {
   );
 }
 
-function ExpandedSidebar() {
+function ExpandedSidebar({ itemTypes, favoriteCollections, recentCollections }: SidebarProps) {
   const [typesOpen, setTypesOpen] = useState(true);
   const [collectionsOpen, setCollectionsOpen] = useState(true);
-
-  const favoriteCollections = collections.filter((c) => c.isFavorite);
-  const otherCollections = collections.filter((c) => !c.isFavorite);
 
   return (
     <div className="flex h-full w-64 flex-col bg-card border-r border-border">
@@ -100,8 +101,7 @@ function ExpandedSidebar() {
           {typesOpen && (
             <ul className="mt-1 space-y-0.5">
               {itemTypes.map((type) => {
-                const Icon = ICON_MAP[type.icon];
-                const count = typeCounts[type.id];
+                const Icon = ICON_MAP[type.icon ?? ''];
                 return (
                   <li key={type.id}>
                     <Link
@@ -109,10 +109,10 @@ function ExpandedSidebar() {
                       className="flex items-center justify-between rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
                     >
                       <div className="flex items-center gap-2">
-                        {Icon && <Icon className="h-4 w-4" style={{ color: type.color }} />}
-                        <span>{type.name}</span>
+                        {Icon && <Icon className="h-4 w-4" style={{ color: type.color ?? undefined }} />}
+                        <span className="capitalize">{type.name}</span>
                       </div>
-                      <span className="text-xs text-muted-foreground">{count}</span>
+                      <span className="text-xs text-muted-foreground">{type.count}</span>
                     </Link>
                   </li>
                 );
@@ -152,28 +152,35 @@ function ExpandedSidebar() {
                   </ul>
                 </div>
               )}
-              {otherCollections.length > 0 && (
+              {recentCollections.length > 0 && (
                 <div>
                   <p className="px-2 py-1 text-xs text-muted-foreground uppercase tracking-wider">
-                    All Collections
+                    Recent
                   </p>
                   <ul className="space-y-0.5">
-                    {otherCollections.map((col) => (
+                    {recentCollections.map((col) => (
                       <li key={col.id}>
                         <Link
                           href={`/collections/${col.id}`}
                           className="flex items-center justify-between rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
                         >
                           <span className="truncate">{col.name}</span>
-                          <span className="text-xs text-muted-foreground shrink-0 ml-2">
-                            {col.itemCount}
-                          </span>
+                          <span
+                            className="h-2.5 w-2.5 rounded-full shrink-0 ml-2"
+                            style={{ backgroundColor: col.dominantType?.color ?? '#6b7280' }}
+                          />
                         </Link>
                       </li>
                     ))}
                   </ul>
                 </div>
               )}
+              <Link
+                href="/collections"
+                className="block px-2 py-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                View all collections →
+              </Link>
             </div>
           )}
         </div>
@@ -195,7 +202,7 @@ function ExpandedSidebar() {
   );
 }
 
-export function Sidebar() {
+export function Sidebar({ itemTypes, favoriteCollections, recentCollections }: SidebarProps) {
   const { open, mobileOpen, toggleMobile } = useSidebar();
 
   return (
@@ -205,7 +212,15 @@ export function Sidebar() {
         className="hidden md:block shrink-0 overflow-hidden transition-[width] duration-300 ease-in-out"
         style={{ width: open ? '256px' : '56px' }}
       >
-        {open ? <ExpandedSidebar /> : <CollapsedSidebar />}
+        {open ? (
+          <ExpandedSidebar
+            itemTypes={itemTypes}
+            favoriteCollections={favoriteCollections}
+            recentCollections={recentCollections}
+          />
+        ) : (
+          <CollapsedSidebar itemTypes={itemTypes} favoriteCollections={favoriteCollections} />
+        )}
       </div>
 
       {/* Mobile drawer overlay */}
@@ -216,7 +231,11 @@ export function Sidebar() {
             onClick={toggleMobile}
           />
           <div className="fixed inset-y-0 left-0 z-50 md:hidden">
-            <ExpandedSidebar />
+            <ExpandedSidebar
+              itemTypes={itemTypes}
+              favoriteCollections={favoriteCollections}
+              recentCollections={recentCollections}
+            />
           </div>
         </>
       )}

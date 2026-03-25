@@ -3,7 +3,7 @@
 
 ## Status
 
-Not Started
+None
 
 ## Goals
 
@@ -22,3 +22,4 @@ Not Started
 - **2026-03-25** — Dashboard Collections (real DB data)
 - **2026-03-25** — Dashboard Items (real DB data)
 - **2026-03-25** — Stats & Sidebar (real DB data)
+- **2026-03-25** — Dashboard Avatar (real DB data)

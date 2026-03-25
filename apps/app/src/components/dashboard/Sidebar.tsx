@@ -15,11 +15,12 @@ import {
   ChevronRight,
   FolderOpen,
   Image,
+  Settings,
 } from 'lucide-react';
-import { currentUser } from '@/lib/mock-data';
 import { useSidebar } from './SidebarProvider';
 import type { ItemTypeWithCount } from '@/lib/db/items';
 import type { CollectionWithStats } from '@/lib/db/collections';
+import type { CurrentUser } from '@/lib/db/users';
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
   Code,
@@ -36,9 +37,11 @@ type SidebarProps = {
   itemTypes: ItemTypeWithCount[];
   favoriteCollections: CollectionWithStats[];
   recentCollections: CollectionWithStats[];
+  user: CurrentUser | null;
 };
 
-function CollapsedSidebar({ itemTypes, favoriteCollections }: Omit<SidebarProps, 'recentCollections'>) {
+function CollapsedSidebar({ itemTypes, favoriteCollections, user }: Omit<SidebarProps, 'recentCollections'>) {
+  const displayName = user?.name ?? 'Guest';
   return (
     <div className="flex h-full w-14 flex-col items-center bg-card border-r border-border py-3">
       <nav className="flex flex-1 flex-col items-center gap-1 overflow-y-auto w-full px-2">
@@ -72,17 +75,18 @@ function CollapsedSidebar({ itemTypes, favoriteCollections }: Omit<SidebarProps,
 
       <div className="mt-auto pt-3 border-t border-border w-full flex justify-center">
         <div
-          title={currentUser.name}
+          title={displayName}
           className="h-7 w-7 rounded-full bg-primary flex items-center justify-center text-xs font-semibold text-primary-foreground cursor-pointer"
         >
-          {currentUser.name.charAt(0)}
+          {displayName.charAt(0).toUpperCase()}
         </div>
       </div>
     </div>
   );
 }
 
-function ExpandedSidebar({ itemTypes, favoriteCollections, recentCollections }: SidebarProps) {
+function ExpandedSidebar({ itemTypes, favoriteCollections, recentCollections, user }: SidebarProps) {
+  const displayName = user?.name ?? 'Guest';
   const [typesOpen, setTypesOpen] = useState(true);
   const [collectionsOpen, setCollectionsOpen] = useState(true);
 
@@ -188,21 +192,29 @@ function ExpandedSidebar({ itemTypes, favoriteCollections, recentCollections }: 
 
       {/* User Avatar */}
       <div className="border-t border-border p-3">
-        <div className="flex items-center gap-3 rounded-md px-2 py-2 hover:bg-accent transition-colors cursor-pointer">
+        <div className="flex items-center gap-3 rounded-md px-2 py-2 hover:bg-accent transition-colors">
           <div className="h-7 w-7 rounded-full bg-primary flex items-center justify-center text-xs font-semibold text-primary-foreground shrink-0">
-            {currentUser.name.charAt(0)}
+            {displayName.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 overflow-hidden">
-            <p className="text-sm font-medium truncate">{currentUser.name}</p>
-            <p className="text-xs text-muted-foreground truncate">{currentUser.email}</p>
+            <p className="text-sm font-medium truncate">{displayName}</p>
+            {user?.email && (
+              <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+            )}
           </div>
+          <button
+            className="shrink-0 text-muted-foreground hover:text-foreground transition-colors"
+            title="Settings"
+          >
+            <Settings className="h-4 w-4" />
+          </button>
         </div>
       </div>
     </div>
   );
 }
 
-export function Sidebar({ itemTypes, favoriteCollections, recentCollections }: SidebarProps) {
+export function Sidebar({ itemTypes, favoriteCollections, recentCollections, user }: SidebarProps) {
   const { open, mobileOpen, toggleMobile } = useSidebar();
 
   return (
@@ -217,9 +229,10 @@ export function Sidebar({ itemTypes, favoriteCollections, recentCollections }: S
             itemTypes={itemTypes}
             favoriteCollections={favoriteCollections}
             recentCollections={recentCollections}
+            user={user}
           />
         ) : (
-          <CollapsedSidebar itemTypes={itemTypes} favoriteCollections={favoriteCollections} />
+          <CollapsedSidebar itemTypes={itemTypes} favoriteCollections={favoriteCollections} user={user} />
         )}
       </div>
 
@@ -235,6 +248,7 @@ export function Sidebar({ itemTypes, favoriteCollections, recentCollections }: S
               itemTypes={itemTypes}
               favoriteCollections={favoriteCollections}
               recentCollections={recentCollections}
+              user={user}
             />
           </div>
         </>

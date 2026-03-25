@@ -9,6 +9,7 @@
     "nx-react:lib-generate": "nx g @nx/react:lib $APP"
   },
   "private": true,
+  "packageManager": "pnpm@10.26.1",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "@prisma/adapter-pg": "^7.0.0",

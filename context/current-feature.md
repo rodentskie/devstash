@@ -27,3 +27,4 @@ Not Started
 - **2026-03-24** — Prisma 7 + Neon PostgreSQL Setup
 - **2026-03-25** — Seed Data
 - **2026-03-25** — Dashboard Collections (real DB data)
+- **2026-03-25** — Dashboard Items (real DB data)

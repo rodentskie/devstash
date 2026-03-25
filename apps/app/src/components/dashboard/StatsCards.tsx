@@ -1,19 +1,16 @@
 import { Package, FolderOpen, Star, Bookmark } from 'lucide-react';
-import { collections, items, typeCounts } from '@/lib/mock-data';
+import { getDashboardStats } from '@/lib/db/items';
 
-const totalItems = Object.values(typeCounts).reduce((a, b) => a + b, 0);
-const totalCollections = collections.length;
-const favoriteItems = items.filter((i) => i.isFavorite).length;
-const favoriteCollections = collections.filter((c) => c.isFavorite).length;
+export async function StatsCards() {
+  const { totalItems, totalCollections, favoriteItems, favoriteCollections } = await getDashboardStats();
 
-const stats = [
-  { label: 'Total Items', value: totalItems, icon: Package, color: '#3b82f6' },
-  { label: 'Collections', value: totalCollections, icon: FolderOpen, color: '#8b5cf6' },
-  { label: 'Favorite Items', value: favoriteItems, icon: Star, color: '#fde047' },
-  { label: 'Favorite Collections', value: favoriteCollections, icon: Bookmark, color: '#f97316' },
-];
+  const stats = [
+    { label: 'Total Items', value: totalItems, icon: Package, color: '#3b82f6' },
+    { label: 'Collections', value: totalCollections, icon: FolderOpen, color: '#8b5cf6' },
+    { label: 'Favorite Items', value: favoriteItems, icon: Star, color: '#fde047' },
+    { label: 'Favorite Collections', value: favoriteCollections, icon: Bookmark, color: '#f97316' },
+  ];
 
-export function StatsCards() {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {stats.map((stat) => {

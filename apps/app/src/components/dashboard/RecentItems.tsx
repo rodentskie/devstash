@@ -1,13 +1,11 @@
 import Link from 'next/link';
 import { Clock } from 'lucide-react';
-import { items } from '@/lib/mock-data';
+import { getRecentItems } from '@/lib/db/items';
 import { ItemRow } from './ItemRow';
 
-const recentItems = [...items]
-  .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-  .slice(0, 10);
+export async function RecentItems() {
+  const recentItems = await getRecentItems();
 
-export function RecentItems() {
   return (
     <section>
       <div className="flex items-center justify-between mb-3">

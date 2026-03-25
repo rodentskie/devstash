@@ -39,6 +39,13 @@
         "cwd": "apps/app"
       }
     },
+    "db:clean-demo": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsx script/clean-demo.ts",
+        "cwd": "apps/app"
+      }
+    },
     "db:test": {
       "executor": "nx:run-commands",
       "options": {

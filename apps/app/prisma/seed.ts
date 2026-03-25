@@ -33,6 +33,8 @@ const COLLECTIONS = [
         title: "useDebounce Hook",
         contentType: "text",
         language: "typescript",
+        isPinned: true,
+        isFavorite: true,
         content: `import { useState, useEffect } from 'react';
 
 export function useDebounce<T>(value: T, delay: number): T {
@@ -82,6 +84,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
         title: "Context Provider Pattern",
         contentType: "text",
         language: "typescript",
+        isFavorite: true,
         content: `import { createContext, useContext, useState, ReactNode } from 'react';
 
 interface ThemeContextValue {
@@ -120,6 +123,8 @@ export function useTheme() {
         type: "prompt",
         title: "Code Review Prompt",
         contentType: "text",
+        isPinned: true,
+        isFavorite: true,
         content: `You are a senior software engineer performing a code review. Analyze the following code and provide feedback on:
 
 1. **Correctness** — Does it work as intended? Are there edge cases?
@@ -188,6 +193,7 @@ Original code:
         title: "Docker Compose — Next.js + PostgreSQL",
         contentType: "text",
         language: "yaml",
+        isFavorite: true,
         content: `version: '3.9'
 
 services:
@@ -262,6 +268,7 @@ echo "Deploy complete."`,
         type: "command",
         title: "Git — Undo Last Commit (keep changes)",
         contentType: "text",
+        isPinned: true,
         content: "git reset --soft HEAD~1",
         description: "Undo the last commit while keeping changes staged",
       },

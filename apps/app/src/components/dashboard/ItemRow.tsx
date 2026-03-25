@@ -9,7 +9,7 @@ import {
   Pin,
   Star,
 } from 'lucide-react';
-import { itemTypes } from '@/lib/mock-data';
+import type { ItemWithType } from '@/lib/db/items';
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
   Code,
@@ -21,25 +21,13 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?:
   Link: LinkIcon,
 };
 
-interface Item {
-  id: string;
-  title: string;
-  description?: string;
-  typeId: string;
-  isFavorite: boolean;
-  isPinned: boolean;
-  tags: string[];
-  createdAt: string;
-}
-
 interface ItemRowProps {
-  item: Item;
+  item: ItemWithType;
 }
 
 export function ItemRow({ item }: ItemRowProps) {
-  const type = itemTypes.find((t) => t.id === item.typeId);
-  const Icon = type ? ICON_MAP[type.icon] : null;
-  const color = type?.color ?? '#6b7280';
+  const Icon = item.type.icon ? ICON_MAP[item.type.icon] : null;
+  const color = item.type.color ?? '#6b7280';
 
   const date = new Date(item.createdAt).toLocaleDateString('en-US', {
     month: 'short',
@@ -65,12 +53,12 @@ export function ItemRow({ item }: ItemRowProps) {
         </div>
         {item.tags.length > 0 && (
           <div className="flex items-center gap-1 mt-0.5 flex-wrap">
-            {item.tags.map((tag) => (
+            {item.tags.map(({ tag }) => (
               <span
-                key={tag}
+                key={tag.name}
                 className="text-xs px-1.5 py-0.5 rounded bg-accent text-muted-foreground"
               >
-                {tag}
+                {tag.name}
               </span>
             ))}
           </div>

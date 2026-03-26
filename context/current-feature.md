@@ -3,11 +3,17 @@
 
 ## Status
 
-None
+In Progress
 
 ## Goals
 
+- Fix the mobile view of the dashboard header in `apps/app`
+- Header is too crowded on mobile — components are overlapping each other
+- Make header components responsive on mobile view
+
 ## Notes
+
+- Reference screenshot: `@context/screenshots/dashboard-header-fix.png`
 
 ## History
 

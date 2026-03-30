@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Code,
@@ -15,9 +15,12 @@ import {
   ChevronRight,
   FolderOpen,
   Image,
-  Settings,
+  LogOut,
+  User,
 } from 'lucide-react';
 import { useSidebar } from './SidebarProvider';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { signOutAction } from '@/actions/auth';
 import type { ItemTypeWithCount } from '@/lib/db/items';
 import type { CollectionWithStats } from '@/lib/db/collections';
 import type { CurrentUser } from '@/lib/db/users';
@@ -33,12 +36,84 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?:
   Link: LinkIcon,
 };
 
+function getInitials(name: string | null): string {
+  if (!name) return '?';
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((word) => word[0].toUpperCase())
+    .join('');
+}
+
 type SidebarProps = {
   itemTypes: ItemTypeWithCount[];
   favoriteCollections: CollectionWithStats[];
   recentCollections: CollectionWithStats[];
   user: CurrentUser | null;
 };
+
+function UserMenu({ user }: { user: CurrentUser | null }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const displayName = user?.name ?? 'Guest';
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center gap-3 rounded-md px-2 py-2 hover:bg-accent transition-colors text-left"
+      >
+        <Avatar className="size-7">
+          <AvatarImage src={user?.image ?? undefined} alt={displayName} />
+          <AvatarFallback>{getInitials(user?.name ?? null)}</AvatarFallback>
+        </Avatar>
+        <div className="flex-1 overflow-hidden">
+          <p className="text-sm font-medium truncate">{displayName}</p>
+          {user?.email && (
+            <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+          )}
+        </div>
+        <ChevronDown
+          className={`h-3.5 w-3.5 text-muted-foreground shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
+
+      {open && (
+        <div className="absolute bottom-full left-0 right-0 mb-1 rounded-md border border-border bg-card shadow-md overflow-hidden">
+          <Link
+            href="/profile"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+          >
+            <User className="h-4 w-4 text-muted-foreground" />
+            Profile
+          </Link>
+          <div className="border-t border-border" />
+          <form action={signOutAction}>
+            <button
+              type="submit"
+              className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors text-destructive"
+            >
+              <LogOut className="h-4 w-4" />
+              Sign out
+            </button>
+          </form>
+        </div>
+      )}
+    </div>
+  );
+}
 
 function CollapsedSidebar({ itemTypes, favoriteCollections, user }: Omit<SidebarProps, 'recentCollections'>) {
   const displayName = user?.name ?? 'Guest';
@@ -74,19 +149,18 @@ function CollapsedSidebar({ itemTypes, favoriteCollections, user }: Omit<Sidebar
       </nav>
 
       <div className="mt-auto pt-3 border-t border-border w-full flex justify-center">
-        <div
-          title={displayName}
-          className="h-7 w-7 rounded-full bg-primary flex items-center justify-center text-xs font-semibold text-primary-foreground cursor-pointer"
-        >
-          {displayName.charAt(0).toUpperCase()}
-        </div>
+        <Link href="/profile" title={displayName}>
+          <Avatar className="size-7">
+            <AvatarImage src={user?.image ?? undefined} alt={displayName} />
+            <AvatarFallback>{getInitials(user?.name ?? null)}</AvatarFallback>
+          </Avatar>
+        </Link>
       </div>
     </div>
   );
 }
 
 function ExpandedSidebar({ itemTypes, favoriteCollections, recentCollections, user }: SidebarProps) {
-  const displayName = user?.name ?? 'Guest';
   const [typesOpen, setTypesOpen] = useState(true);
   const [collectionsOpen, setCollectionsOpen] = useState(true);
 
@@ -190,25 +264,9 @@ function ExpandedSidebar({ itemTypes, favoriteCollections, recentCollections, us
         </div>
       </nav>
 
-      {/* User Avatar */}
+      {/* User Menu */}
       <div className="border-t border-border p-3">
-        <div className="flex items-center gap-3 rounded-md px-2 py-2 hover:bg-accent transition-colors">
-          <div className="h-7 w-7 rounded-full bg-primary flex items-center justify-center text-xs font-semibold text-primary-foreground shrink-0">
-            {displayName.charAt(0).toUpperCase()}
-          </div>
-          <div className="flex-1 overflow-hidden">
-            <p className="text-sm font-medium truncate">{displayName}</p>
-            {user?.email && (
-              <p className="text-xs text-muted-foreground truncate">{user.email}</p>
-            )}
-          </div>
-          <button
-            className="shrink-0 text-muted-foreground hover:text-foreground transition-colors"
-            title="Settings"
-          >
-            <Settings className="h-4 w-4" />
-          </button>
-        </div>
+        <UserMenu user={user} />
       </div>
     </div>
   );

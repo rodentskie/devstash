@@ -31,3 +31,4 @@ Not Started
 - **2026-03-30** — Auth Credentials (Email/Password provider + registration API)
 - **2026-03-30** — Auth UI (Custom sign-in/register pages + sidebar user menu with avatar & sign-out)
 - **2026-03-30** — Email Verification on Registration (Resend)
+- **2026-03-30** — Email Verification Flag (SKIP_EMAIL_VERIFICATION env var)

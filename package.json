@@ -11,6 +11,8 @@
   "private": true,
   "packageManager": "pnpm@10.26.1",
   "dependencies": {
+    "next-auth": "beta",
+    "@auth/prisma-adapter": "^2.8.0",
     "bcryptjs": "^2.4.3",
     "@prisma/adapter-pg": "^7.0.0",
     "@prisma/client": "^7.0.0",

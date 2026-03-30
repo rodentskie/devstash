@@ -28,3 +28,4 @@ Not Started
 - **2026-03-25** — Dashboard Avatar (real DB data)
 - **2026-03-25** — Dashboard Header Mobile Fix
 - **2026-03-30** — Auth Setup (NextAuth v5 + GitHub OAuth + route protection)
+- **2026-03-30** — Auth Credentials (Email/Password provider + registration API)

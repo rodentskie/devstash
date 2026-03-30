@@ -4,6 +4,8 @@ import { randomBytes } from "crypto";
 import { prisma } from "@/lib/prisma";
 import { sendVerificationEmail } from "@/lib/email";
 
+const skipEmailVerification = process.env.SKIP_EMAIL_VERIFICATION === "true";
+
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { name, email, password, confirmPassword } = body as {
@@ -38,8 +40,17 @@ export async function POST(req: NextRequest) {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   await prisma.user.create({
-    data: { name, email, password: hashedPassword },
+    data: {
+      name,
+      email,
+      password: hashedPassword,
+      emailVerified: skipEmailVerification ? new Date() : null,
+    },
   });
+
+  if (skipEmailVerification) {
+    return NextResponse.json({ success: true, skipVerification: true }, { status: 201 });
+  }
 
   const token = randomBytes(32).toString("hex");
   const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours

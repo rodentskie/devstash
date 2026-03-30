@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -47,7 +48,12 @@ export function RegisterForm() {
         return;
       }
 
-      router.push(`/check-email?email=${encodeURIComponent(email)}`);
+      if (data.skipVerification) {
+        toast.success('Account created successfully!');
+        router.push('/dashboard');
+      } else {
+        router.push(`/check-email?email=${encodeURIComponent(email)}`);
+      }
     });
   }
 

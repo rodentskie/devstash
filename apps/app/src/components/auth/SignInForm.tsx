@@ -18,9 +18,19 @@ export function SignInForm() {
   const toastShown = useRef(false);
 
   useEffect(() => {
-    if (searchParams.get('registered') === 'true' && !toastShown.current) {
+    if (toastShown.current) return;
+
+    if (searchParams.get('verified') === 'true') {
       toastShown.current = true;
-      toast.success('Account created! You can now sign in.');
+      toast.success('Email verified! You can now sign in.');
+      router.replace('/sign-in');
+    } else if (searchParams.get('error') === 'invalid-token') {
+      toastShown.current = true;
+      toast.error('Invalid or already used verification link.');
+      router.replace('/sign-in');
+    } else if (searchParams.get('error') === 'token-expired') {
+      toastShown.current = true;
+      toast.error('Verification link expired. Please request a new one.');
       router.replace('/sign-in');
     }
   }, [searchParams, router]);

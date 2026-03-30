@@ -12,6 +12,10 @@ export async function signInWithCredentials(
     return undefined;
   } catch (error) {
     if (error instanceof AuthError) {
+      const cause = error.cause as { err?: Error } | undefined;
+      if (cause?.err?.message === 'EmailNotVerified') {
+        return { error: 'Please verify your email before signing in.' };
+      }
       return { error: 'Invalid email or password' };
     }
     throw error;

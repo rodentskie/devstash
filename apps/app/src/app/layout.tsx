@@ -1,4 +1,5 @@
 import './global.css';
+import { Toaster } from '@/components/ui/sonner';
 
 export const metadata = {
   title: 'DevStash',
@@ -12,7 +13,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="bg-background text-foreground antialiased">{children}</body>
+      <body className="bg-background text-foreground antialiased">
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

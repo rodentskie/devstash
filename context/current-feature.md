@@ -33,3 +33,4 @@ Not Started
 - **2026-03-30** — Email Verification on Registration (Resend)
 - **2026-03-30** — Email Verification Flag (SKIP_EMAIL_VERIFICATION env var)
 - **2026-04-01** — Forgot Password (email reset link via Resend, VerificationToken reuse)
+- **2026-04-01** — Profile Page (user info, usage stats, change password, delete account)

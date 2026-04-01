@@ -1,27 +1,16 @@
-# Current Feature: Forgot Password
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Add a "Forgot password?" link to the sign-in page
-- Create a `/forgot-password` page with an email input form
-- API route `POST /api/auth/forgot-password` that generates a reset token (using existing `VerificationToken` model) and sends a password reset email via Resend
-- Create a `/reset-password?token=...` page with a new password + confirm password form
-- API route `POST /api/auth/reset-password` that validates the token, updates the user's hashed password, and deletes the used token
-- Show appropriate success/error states on both pages
+<!-- Add feature goals here -->
 
 ## Notes
 
-- Reuse the existing `VerificationToken` model — use `password-reset:${email}` as the `identifier` to distinguish from email verification tokens
-- Token expires in 1 hour (shorter window than email verification's 24h)
-- Hash the new password with `bcryptjs` before saving (same as registration)
-- No schema migration needed — `VerificationToken` already exists
-- Follow existing auth UI patterns: `components/auth/` for form components, page files in `app/`
-- Add `sendPasswordResetEmail` to `lib/email.ts` alongside the existing `sendVerificationEmail`
-- Only send the email if the user exists AND has a password (don't reveal whether an email is registered — always show "if an account exists, you'll receive an email")
+<!-- Add implementation notes here -->
 
 ## History
 
@@ -43,3 +32,4 @@ In Progress
 - **2026-03-30** — Auth UI (Custom sign-in/register pages + sidebar user menu with avatar & sign-out)
 - **2026-03-30** — Email Verification on Registration (Resend)
 - **2026-03-30** — Email Verification Flag (SKIP_EMAIL_VERIFICATION env var)
+- **2026-04-01** — Forgot Password (email reset link via Resend, VerificationToken reuse)

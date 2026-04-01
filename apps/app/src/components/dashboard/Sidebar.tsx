@@ -17,6 +17,7 @@ import {
   Image,
   LogOut,
   User,
+  Home,
 } from 'lucide-react';
 import { useSidebar } from './SidebarProvider';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -120,6 +121,16 @@ function CollapsedSidebar({ itemTypes, favoriteCollections, user }: Omit<Sidebar
   return (
     <div className="flex h-full w-14 flex-col items-center bg-card border-r border-border py-3">
       <nav className="flex flex-1 flex-col items-center gap-1 overflow-y-auto w-full px-2">
+        <Link
+          href="/dashboard"
+          title="Home"
+          className="flex h-8 w-8 items-center justify-center rounded-md hover:bg-accent transition-colors"
+        >
+          <Home className="h-4 w-4" />
+        </Link>
+
+        <div className="my-1 w-6 border-t border-border" />
+
         {itemTypes.map((type) => {
           const Icon = ICON_MAP[type.icon ?? ''];
           return (
@@ -167,6 +178,15 @@ function ExpandedSidebar({ itemTypes, favoriteCollections, recentCollections, us
   return (
     <div className="flex h-full w-64 flex-col bg-card border-r border-border">
       <nav className="flex-1 overflow-y-auto p-3 space-y-4">
+        {/* Home */}
+        <Link
+          href="/dashboard"
+          className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+        >
+          <Home className="h-4 w-4" />
+          <span>Home</span>
+        </Link>
+
         {/* Types Section */}
         <div>
           <button

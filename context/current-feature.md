@@ -1,16 +1,19 @@
-# Current Feature
+# Current Feature: Sidebar Home Link
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- Add feature goals here -->
+- Add a "Home" link at the top of the sidebar in `apps/app`
+- Clicking "Home" navigates to the dashboard (root `/` route)
+- Link should follow existing sidebar nav item styling and patterns
 
 ## Notes
 
-<!-- Add implementation notes here -->
+- Scope: `apps/app` only
+- The dashboard is at the root `/` route
 
 ## History
 

@@ -1,19 +1,16 @@
-# Current Feature: Sidebar Home Link
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Add a "Home" link at the top of the sidebar in `apps/app`
-- Clicking "Home" navigates to the dashboard (root `/` route)
-- Link should follow existing sidebar nav item styling and patterns
+<!-- Add feature goals here -->
 
 ## Notes
 
-- Scope: `apps/app` only
-- The dashboard is at the root `/` route
+<!-- Add implementation notes here -->
 
 ## History
 
@@ -37,3 +34,4 @@ In Progress
 - **2026-03-30** — Email Verification Flag (SKIP_EMAIL_VERIFICATION env var)
 - **2026-04-01** — Forgot Password (email reset link via Resend, VerificationToken reuse)
 - **2026-04-01** — Profile Page (user info, usage stats, change password, delete account)
+- **2026-04-01** — Sidebar Home Link (Home nav link redirecting to /dashboard)
